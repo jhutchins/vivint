@@ -20,7 +20,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=['web.py'],
-    entry_points = {
+    entry_points={
         'console_scripts': ['vivint=vivint.__main__'],
     },
     setup_requires=['pytest-runner'],

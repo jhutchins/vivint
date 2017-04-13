@@ -6,10 +6,12 @@ from service import Service
 # TODO I'm not crazy about this global variable
 SERVICE = Service()
 
+
 class Thermostats:
     def GET(self):
         web.header('Content-Type', 'application/json')
         return SERVICE.thermostats()
+
 
 class Thermostat:
     def GET(self, id):
@@ -18,6 +20,7 @@ class Thermostat:
             return web.notfound()
         web.header('Content-Type', 'application/json')
         return result
+
 
 class Attribute:
     def GET(self, id, name):
@@ -36,6 +39,7 @@ class Attribute:
         if not result:
             return web.badrequest()
         return web.nocontent()
+
 
 def run():
     urls = (
