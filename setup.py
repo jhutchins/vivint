@@ -23,6 +23,8 @@ setup(
     extras_require={
         'dev': ['check-manifest'],
         'test': ['coverage', 'nose'],
+    entry_points = {
+        'console_scripts': ['vivint=vivint.__main__'],
     },
     test_suite='nose.collector',
     tests_require=['nose'],
