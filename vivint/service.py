@@ -1,5 +1,10 @@
+import logging
+
 from errors import (ReadonlyError, UnknownAttributeError,
                     UnknownThermostatError, ValidationError)
+
+
+logger = logging.getLogger(__name__)
 
 
 class Service:
@@ -14,6 +19,7 @@ class Service:
 
     def __init__(self):
         """Create a new service"""
+        logger.debug('initializing thermostat service')
         self._data = {
             100: {
                 'id': 100,
@@ -48,6 +54,7 @@ class Service:
         >>> Service().thermostats()
         [{'name': 'Upstairs Thermostat', 'operating-mode': 'heat', 'cool-setpoint': 75, 'heat-setpoint': 65, 'fan-mode': 'auto', 'current-temp': 71, 'id': 100}, {'name': 'Downstairs Thermostat', 'operating-mode': 'heat', 'cool-setpoint': 75, 'heat-setpoint': 65, 'fan-mode': 'auto', 'current-temp': 69, 'id': 101}]
         """
+        logger.debug('fetch thermostats')
         return self._data.values()
 
     def thermostat(self, id):
@@ -73,6 +80,7 @@ class Service:
         ...
         UnknownThermostatError
         """
+        logger.debug('fetch thermostat {}'.format(id))
         try:
             return self._data[int(id)]
         except (ValueError, KeyError):
@@ -103,7 +111,9 @@ class Service:
         UnknownAttributeError
         """
         try:
-            return self.thermostat(id)[name]
+            thermostat = self.thermostat(id)
+            logger.debug('fetch {}'.format(name))
+            return thermostat[name]
         except KeyError:
             raise UnknownAttributeError(name)
 
@@ -152,6 +162,7 @@ class Service:
         ValidationError
         """
         thermostat = self.thermostat(id)
+        logger.debug('set {} to {}'.format(name, value))
         if name not in thermostat:
             raise UnknownAttributeError(name)
 

@@ -1,9 +1,13 @@
 import json
+import logging
 import web
 
 from errors import (ReadonlyError, ServiceError, UnknownAttributeError,
                     UnknownThermostatError, ValidationError)
 from service import Service
+
+
+logger = logging.getLogger(__name__)
 
 
 class Thermostats:
@@ -16,7 +20,9 @@ class Thermostats:
         information currently known to the system about all thermostats.
         """
         web.header('Content-Type', 'application/json')
-        return json.dumps({'result': service.thermostats()})
+        result = json.dumps({'result': service.thermostats()})
+        logger.debug('result = {}', result)
+        return result
 
 
 class Thermostat:
@@ -32,8 +38,11 @@ class Thermostat:
         try:
             result = service.thermostat(id)
             web.header('Content-Type', 'application/json')
-            return json.dumps({'result': result})
+            result = json.dumps({'result': result})
+            logger.debug('result = {}', result)
+            return result
         except UnknownThermostatError:
+            logger.warn('request for unknown thermostat {}'.format(id))
             return web.notfound()
 
     def PATCH(self, id):
@@ -52,12 +61,15 @@ class Thermostat:
         A request payload that is not valid json or is something other than
         a JSON object will result in a bad request response.
         """
+        data = web.data()
         try:
-            value = json.loads(web.data())
+            value = json.loads(data)
         except ValueError:
+            logger.warn('request payload was invalid JSON: {}'.format(data))
             # Not valid JSON
             return web.badrequest()
         if not isinstance(value, dict):
+            logger.warn('request payload not a JSON object: {}'.format(value))
             return web.badrequest()
 
         result = {}
@@ -71,7 +83,9 @@ class Thermostat:
             except ServiceError as e:
                 result[k] = e.message
         web.header('Content-Type', 'application/json')
-        return json.dumps({'result': result})
+        result = json.dumps({'result': result})
+        logger.debug('result = {}'.format(result))
+        return result
 
 
 class Attribute:
@@ -87,8 +101,14 @@ class Attribute:
         try:
             result = service.get_attribute(id, name)
             web.header('Content-Type', 'application/json')
-            return json.dumps({'result': result})
-        except (UnknownAttributeError, UnknownThermostatError):
+            result = json.dumps({'result': result})
+            logger.debug('result = {}'.format(result))
+            return result
+        except (UnknownAttributeError, UnknownThermostatError) as e:
+            if isinstance(e, UnknownAttributeError):
+                logger.warn('request for unknown attribute {}'.format(name))
+            else:
+                logger.warn('request for unknown thermostat {}'.format(id))
             return web.notfound()
 
     def PUT(self, id, name):
@@ -109,15 +129,29 @@ class Attribute:
         In the case of success the response will be not content.
         """
         # TODO add a text/plain API
+        data = web.data()
         try:
-            value = json.loads(web.data())
-            result = service.set_attribute(id, name, value)
+            value = json.loads(data)
+            service.set_attribute(id, name, value)
+            logger.debug('value set')
             return web.nocontent()
-        except (ValidationError, ValueError):
+        except (ValidationError, ValueError) as e:
+            if isinstance(e, ValidationError):
+                msg = 'got invalid value ({}) for {}; {}'
+                logger.warn(msg.format(value, name, e.message))
+            else:
+                logger.warn('got invalid JSON payload: {}'.format(data))
             return web.badrequest()
         except ReadonlyError:
+            logger.warn('got request to change readonly value {}'.format(name))
             return web.forbidden()
-        except (UnknownAttributeError, UnknownThermostatError):
+        except (UnknownAttributeError, UnknownThermostatError) as e:
+            if isinstance(e, UnknownAttributeError):
+                msg = 'request to set value for unkown attribute {}'
+                logger.warn(msg.format(name))
+            else:
+                msg = 'request to set value for unknown thermostat {}'
+                logger.warn(msg.format(id))
             return web.notfound()
 
 
