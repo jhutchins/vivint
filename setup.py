@@ -24,5 +24,5 @@ setup(
         'console_scripts': ['vivint=vivint.__main__'],
     },
     setup_requires=['pytest-runner'],
-    tests_require=['coverage', 'pytest'],
+    tests_require=['pytest', 'pytest-cov'],
 )

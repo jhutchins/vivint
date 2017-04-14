@@ -1,4 +1,6 @@
-import server
+from server import Server
+from service import Service
 
 # Run the web server
-server.run()
+if __name__ == '__main__':
+    Server(Service()).run()
