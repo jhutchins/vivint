@@ -121,6 +121,42 @@ class Attribute:
             return web.notfound()
 
 
+def redirect_to_slash(handler):
+    """Redirect request if not ending in '/'
+
+    A request to a path not ending will receive a redirect request to
+    the same path, but with a slash append.
+    """
+    path = web.webapi.ctx.env['PATH_INFO']
+    logger.debug('request to path: {}'.format(path))
+    if path is not None and path[-1] != '/':
+        return web.redirect(path + '/')
+    return handler()
+
+
+def require_json(handler):
+    """Reject payload requests not in json
+
+    Requests with PUT or PATCH methods will be required to include a
+    Content-Type header with the value of application/json. Requests
+    without the header will receive a bad request response. Those with
+    a value other than application/json will receive a unsupported
+    media type response.
+    """
+    env = web.webapi.ctx.env
+    method = env['REQUEST_METHOD']
+    if method == 'PUT' or method == 'PATCH':
+        if 'CONTENT_TYPE' not in env:
+            logger.warn('{} request without Content-Type'.format(method))
+            return web.badrequest()
+        content_type = env['CONTENT_TYPE']
+        if not content_type.startswith('application/json'):
+            msg = '{} request with Content-Type of {}'
+            logger.warn(msg.format(method, content_type))
+            return web.unsupportedmediatype()
+    return handler()
+
+
 class Server:
     """A class to expose a RESTful API to thermostats
 
@@ -136,16 +172,19 @@ class Server:
         """Create a new web server
 
         Requires a service to be provided to which the commnunication
-        with the thermostats will be delicated.
+        with the thermostats will be deligated.
         """
+        logger.debug('initializing web service')
         urls = (
-            '/thermostats/?', Thermostats,
-            '/thermostats/(\w+)/?', Thermostat,
-            '/thermostats/(\w+)/([^/]+)/?', Attribute,
+            '/thermostats/', Thermostats,
+            '/thermostats/(\w+)/', Thermostat,
+            '/thermostats/(\w+)/([^/]+)/', Attribute,
         )
         env = globals()
-        env['service'] = Service()
+        env['service'] = service
         self.app = web.application(urls, env)
+        self.app.add_processor(redirect_to_slash)
+        self.app.add_processor(require_json)
 
     def run(self):
         """Start the web server"""
