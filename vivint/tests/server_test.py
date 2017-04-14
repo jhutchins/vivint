@@ -65,7 +65,8 @@ def test_get_thermostat():
     url = '/thermostats/100'
     response = app.request(url)
     assert '301 Moved Permanently' == response.status
-    assert response.headers['Location'] == 'http://0.0.0.0:8080/thermostats/100/'
+    url = 'http://0.0.0.0:8080/thermostats/100/'
+    assert response.headers['Location'] == url
 
     # Test errors
     for url in ['/thermostats/102/', '/thermostats/fake/']:
@@ -107,7 +108,8 @@ def test_patch_thermostat():
     url = '/thermostats/100'
     response = app.request(url)
     assert '301 Moved Permanently' == response.status
-    assert response.headers['Location'] == 'http://0.0.0.0:8080/thermostats/100/'
+    url = 'http://0.0.0.0:8080/thermostats/100/'
+    assert response.headers['Location'] == url
 
     # Test errors
     url = '/thermostats/102/'
@@ -168,7 +170,8 @@ def test_get_attribute():
     url = '/thermostats/100/fan-mode'
     response = app.request(url)
     assert '301 Moved Permanently' == response.status
-    assert response.headers['Location'] == 'http://0.0.0.0:8080/thermostats/100/fan-mode/'
+    url = 'http://0.0.0.0:8080/thermostats/100/fan-mode/'
+    assert response.headers['Location'] == url
 
     # Test errors
     for url in ['/thermostats/102/fan-mode/', '/thermostats/100/fake/']:
@@ -198,7 +201,8 @@ def test_put_attribute():
     url = '/thermostats/100/fan-mode'
     response = app.request(url, headers=headers)
     assert '301 Moved Permanently' == response.status
-    assert response.headers['Location'] == 'http://0.0.0.0:8080/thermostats/100/fan-mode/'
+    url = 'http://0.0.0.0:8080/thermostats/100/fan-mode/'
+    assert response.headers['Location'] == url
 
     # Test errors
     url = '/thermostats/102/fan-mode/'

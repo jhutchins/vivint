@@ -21,7 +21,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=['web.py'],
     entry_points={
-        'console_scripts': ['vivint=vivint.__main__'],
+        'console_scripts': ['vivint=vivint.cli:main'],
     },
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov'],
