@@ -3,11 +3,17 @@ from errors import (ReadonlyError, UnknownAttributeError,
 
 
 class Service:
+    """A service to handle communication with the thermostats
+
+    This version of the service is an in memory stub mock but could be
+    replaced or updated to actually communication with real thermostats.
+    """
 
     FAN_MODES = {u'auto', u'on'}
     OPERATING_MODES = {u'cool', u'heat', u'off'}
 
     def __init__(self):
+        """Create a new service"""
         self._data = {
             100: {
                 'id': 100,
