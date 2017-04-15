@@ -27,13 +27,13 @@ A thermostat object has the follow structure
 
 |   attribute    |       value       | access |
 |:--------------:|:-----------------:|:------:|
-| name           | <string>          | r/w    |
-| operating-mode | cool | heat | off | r/w    |
-| cool-setpoint  | <int>; 30-100     | r/w    |
-| heat-setpoint  | <int>; 30-100     | r/w    |
-| fan-mode       | auto | on         | r/w    |
-| current-temp   | <int>             | r/o    |
-| id             | <int>             | r/o    |
+| name           | string            | r/w    |
+| operating-mode | cool / heat / off | r/w    |
+| cool-setpoint  | int; 30-100       | r/w    |
+| heat-setpoint  | int; 30-100       | r/w    |
+| fan-mode       | auto / on         | r/w    |
+| current-temp   | int               | r/o    |
+| id             | int               | r/o    |
 
 
 
