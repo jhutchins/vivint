@@ -197,7 +197,7 @@ Server: localhost
 75
 
 
- PUT /thermostats/<id>/<name>
+PUT /thermostats/<id>/<name>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Set the named attribute to the given value for the identified thermostat. The
