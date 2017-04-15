@@ -84,7 +84,7 @@ Server: localhost
 ```
 
 
-### GET /thermostats/<id>/
+### GET /thermostats/[id]/
 
 Return all know information for a specified thermostat. Return 404 if
 not found.
@@ -120,7 +120,7 @@ Server: localhost
 ```
 
 
-### PATCH /thermostats/<id>/
+### PATCH /thermostats/[id]/
 
 Update a group of attributes for a given thermostat. The payload must be a
 JSON object of attributes and values. The result will include the attributes
@@ -165,7 +165,7 @@ Server: localhost
 ```
 
 
- ### GET /thermostats/<id>/<name>
+ ### GET /thermostats/[id]/[name]
 
 Get the value of the named attribute for the identified thermostat. The result
 will be a JSON encoded value (number of string). Inability to locate either the
@@ -194,7 +194,7 @@ Server: localhost
 ```
 
 
-### PUT /thermostats/<id>/<name>
+### PUT /thermostats/[id]/[name]
 
 Set the named attribute to the given value for the identified thermostat. The
 value must be a JSON encode value (string or integer) of the appropriate type
