@@ -6,7 +6,7 @@ from vivint.service import Service
 
 
 def test_get_thermostats():
-    app = Server(Service).app
+    app = Server(Service()).app
 
     # Test happy path
     url = '/thermostats/'
@@ -43,7 +43,7 @@ def test_get_thermostats():
 
 
 def test_get_thermostat():
-    app = Server(Service).app
+    app = Server(Service()).app
 
     # Test happy path
     url = '/thermostats/100/'
@@ -77,7 +77,7 @@ def test_get_thermostat():
 
 
 def test_patch_thermostat():
-    app = Server(Service).app
+    app = Server(Service()).app
 
     # Test happy path
     payload = json.dumps({
@@ -157,7 +157,7 @@ def test_patch_thermostat():
 
 
 def test_get_attribute():
-    app = Server(Service).app
+    app = Server(Service()).app
 
     # Test happy path
     url = '/thermostats/100/fan-mode/'
@@ -182,7 +182,7 @@ def test_get_attribute():
 
 
 def test_put_attribute():
-    app = Server(Service).app
+    app = Server(Service()).app
 
     # Test happy path
     url = '/thermostats/100/fan-mode/'
