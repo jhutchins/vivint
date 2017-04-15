@@ -3,12 +3,25 @@ Vivint Homework Project
 
 The solution to the vivint homework problem for Jeff Hutchins.
 
+
+Running
+_______
+
+The application can be run either as python vivint or by installing the
+project with python setup.py install and using the provided vivint script.
+
+By default the application will run on port 8080 with a default logging
+verbosity of info. These options can be changed with the --port and --log
+flags. For more info run the application with the --help flag.
+
+
 API Overview
 ------------
 
 All responses are wrapped in a JSON object under the key 'result'. This is so
 the API might be more easily extended in the future without introducing
 breaking changes to the API.
+
 
 Models
 ~~~~~~
@@ -32,6 +45,7 @@ A thermostat object has the follow structure
 +----------------+-------------------+--------+
 | id             | <int>             | r/o    |
 +----------------+-------------------+--------+
+
 
 
 Endpoints
